@@ -1,5 +1,4 @@
-# appSisdoar
-Projeto App Sisdoar Ionic
+# Projeto App Sisdoar Ionic
 
 Necessário clonar o projeto web e deixá-lo funcionando.
 Downdload desta versao node.js - https://nodejs.org/dist/v0.10.37/x64/

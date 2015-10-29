@@ -1,40 +1,34 @@
 angular.module('starter.services', [])
 
-.service('LoginService', function($q,$http) {
-  return {
-    loginUser: function(name, pw) {
-      var deferred = $q.defer();
-      var promise = deferred.promise;
+.service('LoginService', function($q,$http,$state, $ionicPopup) {
+      return {
+        login: function (method, url, data, msgSuccess,msgFalha) {
+          $http({
+            method: method,
+            url:  url,
+            data: data
+          })
+            .error(function(data) {
+              var alertPopup = $ionicPopup.alert({
+                title: 'Falha ao Autenticar!',
+                template: 'Por favor, cheque suas credenciais!'
+              })})
+            .success(function(data) {
+              console.log(data);
+              if(data.token == 'identificado'){
+                $state.go('tab.dash');
+              }else{
+                var alertPopup = $ionicPopup.alert({
+                  title: 'Falha ao Autenticar!',
+                  template: 'Por favor, cheque suas credenciais!'
+                });
+              }
 
-      var data = {'email': name, 'pass':pw};
-
-      var teste ='';
-      $http({
-        method: 'POST',
-        url: 'http://sisdo-web/token/login',
-        data: data
-      }).success(function(data) {
-          console.log(data)
-          return data;
-      });
-
-     /* if (teste == 'identificado') {
-        deferred.resolve('Bem vindo ' + name + '!');
-      } else {
-        deferred.reject('Wrong credentials.');
+            });
+        }
       }
-      promise.success = function(fn) {
-        promise.then(fn);
-        return promise;
-      };
-      promise.error = function(fn) {
-        promise.then(null, fn);
-        return promise;
-      };
-      return promise; */
-    }
-  }
 })
+
 
 .factory('Chats', function() {
   // Might use a resource here that returns a JSON array

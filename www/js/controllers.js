@@ -6,58 +6,15 @@ function ContentController($scope, $ionicSideMenuDelegate) {
 
 angular.module('starter.controllers', [])
 
-.controller('LoginCtrl', function($scope, $http, $ionicPopup, $state) {
+.controller('LoginCtrl', function($scope, $http, $ionicPopup, $state, LoginService) {
   $scope.data = {};
 
   $scope.login = function() {
-
     var data = {'email':$scope.data.username, 'pass':$scope.data.password};
-    $http({
-      method: 'POST',
-      url: 'http://sisdo-web/token/login',
-      data: data
-      })
-      .error(function(data) {
-          var alertPopup = $ionicPopup.alert({
-            title: 'Falha ao Autenticar!',
-            template: 'Por favor, cheque suas credenciais!'
-          })})
-      .success(function(data) {
-          console.log(data);
-          if(data.token == 'identificado'){
-            $state.go('tab.dash');
-          }else{
-            var alertPopup = $ionicPopup.alert({
-              title: 'Falha ao Autenticar!',
-              template: 'Por favor, cheque suas credenciais!'
-            });
-          }
-
-      });
-
-
-      /*
-        LoginService.loginUser($scope.data.username, $scope.data.password).success(function(data) {
-        $state.go('tab.dash');
-      }).error(function(data) {
-        var alertPopup = $ionicPopup.alert({
-          title: 'Falha ao Autenticar!',
-          template: 'Por favor, cheque suas credenciais!'
-        });
-      }); */
+    LoginService.login('post','http://sisdo-web/token/login', data);
   }
 })
-  /*
-.controller('MainCtrl', function($scope, $http) {
-  $http.post('http://sisdo-web/usuario/getTestes').then(function(resp) {
-    console.log(resp.data.teste);
-    $scope.conditions = resp.data.teste;
-  }, function(err) {
-    console.error('ERR', err);
-    // err.status will contain the status code
-  })
-})
-*/
+
 
 //menu lateral
 .controller('TabsCtrl', function($scope, $ionicSideMenuDelegate) {
@@ -66,7 +23,78 @@ angular.module('starter.controllers', [])
       }
 })
 
-.controller('DashCtrl', function($scope,$ionicSideMenuDelegate) {})
+.controller('InstituicaoCtrl', function($scope,$stateParams, $ionicSideMenuDelegate) {
+
+
+        $scope.getInstituicaoById = function () {
+            var data = $stateParams;
+            $http({
+                method: 'GET',
+                url:  'http://sisdo-web/institution-api/get-institutions',
+                data: data
+            });
+
+        }
+         /*   .error(function(data) {
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Falha ao Autenticar!',
+                    template: 'Por favor, cheque suas credenciais!'
+                })})
+            .success(function(data) {
+                console.log(data);
+                if(data.token == 'identificado'){
+                    $state.go('tab.dash');
+                }else{
+                    var alertPopup = $ionicPopup.alert({
+                        title: 'Falha ao Autenticar!',
+                        template: 'Por favor, cheque suas credenciais!'
+                    });
+                }
+
+            });*/
+})
+
+.controller('DashCtrl', function($scope,$http,$state,$ionicSideMenuDelegate) {
+
+      $http.post('http://sisdo-web/institution-api/get-institutions').then(function(instituicao) {
+        console.log(instituicao.data);
+        $scope.instituicoes = instituicao.data;
+      },
+      function(err) {
+        console.error('ERR', err);
+      });
+
+      $scope.limpaAuto = function () {
+         $scope.completing = false;
+      },
+      
+      $scope.pesquisar = function(pesquisa){
+
+        // Se a pesquisa for vazia
+        if (pesquisa == ""){
+
+          // Retira o autocomplete
+          $scope.completing = false;
+
+        }else{
+          // Pesquisa no banco via AJAX
+          $http.post('http://sisdo-web/institution-api/get-instituction-auto-complete', { "term" : pesquisa}).
+              success(function(data) {
+                console.log(data);
+                // Coloca o autocomplemento
+                $scope.completing = true;
+
+                // JSON retornado do banco
+                $scope.dicas = data;
+              })
+              .error(function(data) {
+                // Se deu algum erro, mostro no log do console
+                console.log("Ocorreu um erro no banco de dados ao trazer auto-ajuda da home");
+              });
+        }
+      };
+
+})
 
 .controller('ChatsCtrl', function($scope, Chats) {
   // With the new view caching in Ionic, Controllers are only called

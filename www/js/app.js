@@ -22,8 +22,9 @@ angular.module('starter', ['ionic','starter.controllers', 'starter.services'])
 
 
 
-.run(function($ionicPlatform) {
-  $ionicPlatform.ready(function() {
+.run(function($ionicPlatform,$rootScope,$ionicLoading) {
+
+    $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
@@ -35,18 +36,40 @@ angular.module('starter', ['ionic','starter.controllers', 'starter.services'])
       // org.apache.cordova.statusbar required
       StatusBar.styleLightContent();
     }
-  });
+    });
+
+    //mostra mensagem no loading ajax
+    $rootScope.$on('loading:show', function() {
+        $ionicLoading.show({template: 'Aguarde, Carregando.'})
+    });
+    $rootScope.$on('loading:hide', function() {
+        $ionicLoading.hide()
+    });
 })
 
-//configura para envio de requisicao ao php
+//configura para envio de requisicao
 .config(function ($httpProvider) {
-  // send all requests payload as query string
-  $httpProvider.defaults.transformRequest = function(data){
-    if (data === undefined) {
-      return data;
-    }
-    return serialize(data);
-  };
+    //intercepta chamada ajax e para colocar um loading
+    $httpProvider.interceptors.push(function($rootScope) {
+        return {
+            request: function(config) {
+                $rootScope.$broadcast('loading:show')
+                return config
+            },
+            response: function(response) {
+                $rootScope.$broadcast('loading:hide')
+                return response
+            }
+        }
+    });
+
+    ////configura para envio de requisicao ao php
+    $httpProvider.defaults.transformRequest = function(data){
+        if (data === undefined) {
+          return data;
+        }
+        return serialize(data);
+    };
 
   // set all post requests content type
   $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
@@ -65,11 +88,31 @@ angular.module('starter', ['ionic','starter.controllers', 'starter.services'])
         templateUrl: 'templates/login.html',
         controller: 'LoginCtrl'
       })
+
+      // setup an abstract state for the tabs directive
+      .state('tab', {
+          url: '/tab',
+          abstract: true,
+          templateUrl: 'templates/tabs.html',
+          controller: 'TabsCtrl'
+      })
+
     .state('instituicao', {
       url: '/instituicao/:id',
       templateUrl: 'templates/instituicao.html',
       controller: 'InstituicaoCtrl'
     })
+
+    .state('tab.minhastransacoes', {
+      url: '/minhas-transacoes',
+      views: {
+          'tab-account': {
+              templateUrl: 'templates/tab-minhas-transacoes.html',
+              controller: 'MinhasTransacoesCtrl'
+          }
+      }
+    })
+
     .state('donativos', {
       url: '/donativos/:id',
       templateUrl: 'templates/donativos.html',
@@ -86,16 +129,6 @@ angular.module('starter', ['ionic','starter.controllers', 'starter.services'])
       controller: 'TransacaoCtrl'
     })
 
-    // setup an abstract state for the tabs directive
-  .state('tab', {
-    url: '/tab',
-    abstract: true,
-    templateUrl: 'templates/tabs.html',
-    controller: 'TabsCtrl'
-  })
-
-
-
   // Each tab has its own nav history stack:
 
   .state('tab.dash', {
@@ -108,12 +141,12 @@ angular.module('starter', ['ionic','starter.controllers', 'starter.services'])
     }
   })
 
-  .state('tab.chats', {
-      url: '/chats',
+  .state('tab.minhas-transacoes', {
+      url: '/minhastransacoes',
       views: {
-        'tab-chats': {
-          templateUrl: 'templates/tab-chats.html',
-          controller: 'ChatsCtrl'
+        'tab-minhas-transacoes': {
+          templateUrl: 'templates/tab-minhas-transacoes.html',
+          controller: 'MinhasTransacoesCtrl'
         }
       }
     })

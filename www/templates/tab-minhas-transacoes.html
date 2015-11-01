@@ -1,0 +1,12 @@
+<ion-view view-title="Campanhas" class="text-center" name="minhastransacoes">
+    <ion-content class="padding">
+        <ion-list>
+            <ion-item class="item-remove-animate item-avatar item-icon-right"
+                      ng-repeat="transacao in transacoes" type="item-text-wrap" ng-click="go('/transacao/'+ transacao.id)">
+                <h2>{{transacao.product}}</h2>
+                <p>{{transacao.status}}</p>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-view>

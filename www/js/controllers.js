@@ -44,7 +44,8 @@ angular.module('starter.controllers', [])
 })
 
 .controller('DonativosCtrl', function($scope,$stateParams,$http,$location, $ionicSideMenuDelegate) {
-    $http({
+
+        $http({
         method: 'GET',
         url:  'http://sisdo-web/product-api/get-donations-by-institution',
         params: $stateParams
@@ -59,7 +60,7 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('DonativoCtrl', function($scope,$stateParams,$http,$ionicPopup,$location, $localstorage,$ionicSideMenuDelegate) {
+.controller('DonativoCtrl', function($scope,$stateParams,$http,$ionicPopup,$location, $localstorage) {
 
     var donativo = {};
     $http({
@@ -86,7 +87,7 @@ angular.module('starter.controllers', [])
         confirmPopup.then(function(res) {
             if(res) {
                 //estou inserindo o usuario manualmente por enquanto
-                var transaction = {'personUser':$localstorage.get('user').id,'institutionUser':$scope.getDonativo().institutionUser, 'product': $scope.getDonativo().idProduto, 'shippingMethod': $scope.metodo, 'quantify': $scope.qtd};
+                var transaction = {'personUser':$localstorage.getObject('user').id,'institutionUser':$scope.getDonativo().institutionUser, 'product': $scope.getDonativo().idProduto, 'shippingMethod': $scope.metodo, 'quantify': $scope.qtd};
                 console.log(transaction);
                 $http({
                     method: 'POST',
@@ -112,6 +113,9 @@ angular.module('starter.controllers', [])
 
 })
 .controller('TransacaoCtrl', function($scope,$stateParams,$http,$location, $ionicSideMenuDelegate) {
+        $scope.openMenu = function () {
+            $ionicSideMenuDelegate.toggleLeft();
+        }
         var transacao = {};
         $http({
             method: 'GET',
@@ -128,13 +132,39 @@ angular.module('starter.controllers', [])
         },
         $scope.getTransacao = function () {
             return this.transacao;
+        },
+        $scope.go = function ( path ) {
+            $location.path( path );
+        };
+})
+
+.controller('MinhasTransacoesCtrl', function($scope,$http,$ionicLoading,$location,$localstorage, $ionicSideMenuDelegate) {
+        $scope.openMenu = function () {
+            $ionicSideMenuDelegate.toggleLeft();
         }
+        var transacao = {};
 
+        $http({
+            method: 'GET',
+            url:  'http://sisdo-web/transaction-api/get-transactions-user?id='+ $localstorage.getObject('user').id,
+        }).success(function(data) {
+            console.log(data);
+            $scope.setTransacao(data);
+            return $scope.transacoes = data;
+        });
 
+        $scope.setTransacao = function (data) {
+            this.transacoes = data;
+        },
+        $scope.getTransacao = function () {
+            return this.transacoes;
+        },
+        $scope.go = function ( path ) {
+            $location.path( path );
+        };
 })
 
 .controller('DashCtrl', function($scope,$http,$state,$location,$ionicSideMenuDelegate) {
-
       $scope.go = function ( path ) {
            $location.path( path );
       },

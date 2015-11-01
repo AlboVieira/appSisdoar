@@ -1,5 +1,22 @@
-<ion-view view-title="Instituicao" name="login-view">
+
+<ion-view view-title="Instituicao" class="text-center" name="instituicao">
     <ion-content class="padding">
-        tadads
+
+        <div class="text-center">
+            <img style="width: 100%;height: 250px;" class="" ng-src="http://sisdo-web{{instituicao.picture}}">
+        </div>
+
+        <ion-list>
+            <ion-item class="item-remove-animate item-avatar item-icon-right"
+                       type="item-text-wrap">
+                <h2>{{instituicao.fancyName}}</h2>
+                <p>{{instituicao.branch}}</p>
+                <p>{{instituicao.email}}</p>
+
+            </ion-item>
+            <a class="button button-full button-balanced" ng-click="go('/donativos/'+instituicao.id)" >Ver Donativos</a>
+            <a class="button button-full button-energized">Doacao Financeira</a>
+        </ion-list>
+
     </ion-content>
 </ion-view>

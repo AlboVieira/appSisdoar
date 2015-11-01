@@ -10,7 +10,7 @@
       <div class="item item-input " style="height: 10%" ng-click="">
         <input type="text" ng-keyup="pesquisar(search)" ng-blur="limpaAuto()" ng-model="search" class="form-control input-lg"
                placeholder="O que voce procura?" autofocus autocomplete="off">
-        <i ng-click="" class="button button-clear icon ion-search padding-right"></i>
+        <i class="button button-clear icon ion-search padding-right"></i>
       </div>
     </ion-list>
 
@@ -27,12 +27,11 @@
     <div style="margin-top: 10px">
     <ion-list>
       <ion-item class="item-remove-animate item-avatar item-icon-right"
-                ng-repeat="instituicao in instituicoes" type="item-text-wrap" ng-click="">
+                ng-repeat="instituicao in instituicoes" type="item-text-wrap" ng-click="go('/instituicao/'+instituicao.id)">
         <img ng-src="http://sisdo-web{{instituicao.picture}}">
         <h2>{{instituicao.fancyName}}</h2>
         <p>{{instituicao.branch}}</p>
         <i class="icon ion-chevron-right icon-accessory"></i>
-        <a href="#/instituicao/{{instituicao.id}}">Ver mais</a>
         <ion-option-button class="button-assertive" ng-click="remove(chat)">
           Delete
         </ion-option-button>

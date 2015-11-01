@@ -1,0 +1,39 @@
+
+<ion-view view-title="Donativo" class="text-center" name="donativo">
+    <ion-content class="padding">
+        <div class="list">
+            <label class="item">
+                <span class="assertive">Data Limite : {{donativo.date}}</span>
+            </label>
+            <label class="item">
+                Campanha : {{donativo.title}}
+            </label>
+            <label class="item">
+                Quantidade Necessaria : {{donativo.quantity}} ({{donativo.unity}})
+            </label>
+        </div>
+        <hr>
+        <div class="list">
+            <form ng-submit="submit()" ng-controller="DonativoCtrl">
+                <input type="hidden" ng-model="produtoId" value="{{donativo.idProduct}}">
+                <label class="item item-input item-select">
+                    <div class="input-label">
+                        Entrega
+                    </div>
+                    <select ng-model="metodo">
+                        <option value="1">Correio</option>
+                        <option value="2">Entrega Pessoalmente</option>
+                        <option value="3">Nao se Aplica</option>
+                    </select>
+                </label>
+                <label class="item item-input">
+                    <input type="text" placeholder="Quantidade" ng-model="qtd">
+                </label>
+
+                <button class="button button-full button-balanced" type="submit">Iniciar Doacao</button>
+            </form>
+        </div>
+
+
+    </ion-content>
+</ion-view>

@@ -1,0 +1,14 @@
+
+<ion-view view-title="Donativos" class="text-center" name="donativos">
+    <ion-content class="padding">
+        <ion-list>
+            <ion-item class="item-remove-animate item-avatar item-icon-right"
+                      ng-repeat="donativo in donativos" type="item-text-wrap" ng-click="go('/donativo/'+ donativo.idProduto)">
+                <h2>{{donativo.title}}</h2>
+                <p>{{donativo.metodo}}</p>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+        </ion-list>
+
+    </ion-content>
+</ion-view>

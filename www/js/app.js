@@ -18,7 +18,7 @@ var serialize = function(obj, prefix) {
   return str.join("&");
 };
 
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
+angular.module('starter', ['ionic','starter.controllers', 'starter.services'])
 
 
 
@@ -65,13 +65,26 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         templateUrl: 'templates/login.html',
         controller: 'LoginCtrl'
       })
-
     .state('instituicao', {
       url: '/instituicao/:id',
       templateUrl: 'templates/instituicao.html',
       controller: 'InstituicaoCtrl'
     })
-
+    .state('donativos', {
+      url: '/donativos/:id',
+      templateUrl: 'templates/donativos.html',
+      controller: 'DonativosCtrl'
+    })
+    .state('donativo', {
+        url: '/donativo/:id',
+        templateUrl: 'templates/donativo.html',
+        controller: 'DonativoCtrl'
+    })
+    .state('transacao', {
+      url: '/transacao/:id',
+      templateUrl: 'templates/transacao.html',
+      controller: 'TransacaoCtrl'
+    })
 
     // setup an abstract state for the tabs directive
   .state('tab', {

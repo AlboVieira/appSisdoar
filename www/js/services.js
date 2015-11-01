@@ -1,6 +1,6 @@
 angular.module('starter.services', [])
 
-.service('LoginService', function($q,$http,$state, $ionicPopup) {
+.service('LoginService', function($q,$http,$state,$localstorage, $ionicPopup) {
       return {
         login: function (method, url, data, msgSuccess,msgFalha) {
           $http({
@@ -14,8 +14,9 @@ angular.module('starter.services', [])
                 template: 'Por favor, cheque suas credenciais!'
               })})
             .success(function(data) {
-              console.log(data);
+              //console.log(data);
               if(data.token == 'identificado'){
+                $localstorage.setObject('user', data);
                 $state.go('tab.dash');
               }else{
                 var alertPopup = $ionicPopup.alert({
@@ -29,6 +30,22 @@ angular.module('starter.services', [])
       }
 })
 
+.factory('$localstorage', ['$window', function($window) {
+  return {
+    set: function(key, value) {
+      $window.localStorage[key] = value;
+    },
+    get: function(key, defaultValue) {
+      return $window.localStorage[key] || defaultValue;
+    },
+    setObject: function(key, value) {
+      $window.localStorage[key] = JSON.stringify(value);
+    },
+    getObject: function(key) {
+      return JSON.parse($window.localStorage[key] || '{}');
+    }
+  }
+}])
 
 .factory('Chats', function() {
   // Might use a resource here that returns a JSON array

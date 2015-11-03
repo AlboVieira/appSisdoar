@@ -43,7 +43,7 @@ angular.module('starter', ['ionic','starter.controllers', 'starter.services'])
         $ionicLoading.show({template: 'Aguarde, Carregando.'})
     });
     $rootScope.$on('loading:hide', function() {
-        $ionicLoading.hide()
+        $ionicLoading.hide();
     });
 })
 
@@ -53,12 +53,12 @@ angular.module('starter', ['ionic','starter.controllers', 'starter.services'])
     $httpProvider.interceptors.push(function($rootScope) {
         return {
             request: function(config) {
-                $rootScope.$broadcast('loading:show')
-                return config
+                $rootScope.$broadcast('loading:show');
+                return config;
             },
             response: function(response) {
-                $rootScope.$broadcast('loading:hide')
-                return response
+                $rootScope.$broadcast('loading:hide');
+                return response;
             }
         }
     });
@@ -150,6 +150,14 @@ angular.module('starter', ['ionic','starter.controllers', 'starter.services'])
         }
       }
     })
+
+  .state('mensagens', {
+      url: '/mensagens/:id',
+      templateUrl: 'templates/mensagens.html',
+      controller: 'MensagensCtrl'
+  })
+
+
     .state('tab.chat-detail', {
       url: '/chats/:chatId',
       views: {

@@ -14,7 +14,8 @@
             Data Inicio : {{transacao.startDate}}
         </label>
 
-        <button class="button button-full button-balanced" type="submit">Enviar Mensagem</button>
+        <button class="button button-full button-balanced" type="submit"
+                ng-click="go('/mensagens/'+transacao.id)">Enviar Mensagem</button>
         <button class="button button-full button-positive" type="submit">Ver Conversa</button>
     </ion-content>
 </ion-view>

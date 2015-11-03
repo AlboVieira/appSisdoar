@@ -1,0 +1,25 @@
+
+<ion-view view-title="Mensagens" class="text-center" name="mensagens">
+    <ion-content class="padding">
+        <ion-list>
+            <ion-item class="item text-left"
+                    ng-repeat="mensagem in mensagens"
+                    ng-class="getClass(mensagem.isInstituicao)"
+                    type="item-text-wrap" ng-click="">
+                <img ng-src="http://sisdo-web{{mensagem.foto}}" />
+                <h2>{{mensagem.nome}}</h2>
+                <h2>{{mensagem.date}}</h2>
+                <p>{{mensagem.message}}</p>
+            </ion-item>
+        </ion-list>
+
+        <div>
+            <form ng-submit="submit()" ng-controller="MensagensCtrl">
+                <label class="item item-input">
+                    <input autofocus type="text" placeholder="Digite a Mensagem" ng-model="msg">
+                </label>
+                <button class="button button-full button-positive" type="submit">Enviar</button>
+            </form>
+        </div>
+    </ion-content>
+</ion-view>

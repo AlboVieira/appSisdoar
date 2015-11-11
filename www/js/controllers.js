@@ -4,7 +4,7 @@ function ContentController($scope, $ionicSideMenuDelegate) {
   };
 }
 
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['sticky'])
 
 .controller('LoginCtrl', function($scope, $http, $ionicPopup,$localstorage, $state, LoginService) {
    $scope.data = {};
@@ -158,11 +158,7 @@ angular.module('starter.controllers', [])
         $location.path( path );
     };
 })
-.controller('MensagensCtrl', function($scope,$stateParams,$http,$location,$localstorage,$ionicPopup, $ionicSideMenuDelegate) {
-
-  //  $scope.openMenu = function () {
-  //      $ionicSideMenuDelegate.toggleLeft();
-   // };
+.controller('MensagensCtrl', function($scope,$stateParams,$http,$location,$localstorage,$window,$q,$ionicPopup, $ionicSideMenuDelegate) {
 
    //pega mensagens a partir do id da transacao
     var mensagens = {};
@@ -187,20 +183,23 @@ angular.module('starter.controllers', [])
     };
     $scope.submit = function () {
 
-        console.log($localstorage.getObject('user').id);
-        console.log($scope.msg);
-        console.log($stateParams.id);
         var mensagem = {'idTransacao':$stateParams.id, 'idUser': $localstorage.getObject('user').id,'message':$scope.msg};
         console.log(mensagem);
+
+        var defer = $q.defer();
+
         $http({
             method: 'POST',
             url:  'http://sisdo-web/transaction-api/new-message',
             data: mensagem
         }).success(function(data) {
             console.log(data);
-            //$scope.setMensagens(data);
-            //return $scope.mensagens = data;
+            $scope.mensagens = data;
         });
+
+        //$scope.mensagens = mensagem;
+        //trocar por um carregamento so da view
+        $window.location.reload();
     };
     $scope.go = function ( path ) {
         $location.path( path );
@@ -209,6 +208,7 @@ angular.module('starter.controllers', [])
 
 .controller('DashCtrl', function($scope,$http,$state,$localstorage,$location,$ionicSideMenuDelegate) {
 
+      var teste = {};
       $scope.go = function ( path ) {
            $location.path( path );
       };
@@ -234,21 +234,42 @@ angular.module('starter.controllers', [])
 
         }else{
           // Pesquisa no banco via AJAX
-          $http.get('http://sisdo-web/institution-api/get-instituction-auto-complete', { "term" : pesquisa}).
-              success(function(data) {
+            $http({
+                method: 'GET',
+                url:  'http://sisdo-web/institution-api/get-instituction-auto-complete',
+                params: { "term" : pesquisa, global:false}
+            })
+              .success(function(data) {
                 console.log(data);
                 // Coloca o autocomplemento
                 $scope.completing = true;
-
-                // JSON retornado do banco
                 $scope.dicas = data;
               })
               .error(function(data) {
-                // Se deu algum erro, mostro no log do console
                 console.log("Ocorreu um erro no banco de dados ao trazer auto-ajuda da home");
-              });
+          });
         }
       };
+
+        $scope.preenche = function (data) {
+
+            $scope.search = '';
+            $scope.dados = data;
+        };
+        $scope.buscaInstituicao = function(nomeInstituicao){
+            console.log(nomeInstituicao);
+                $http({
+                    method: 'GET',
+                    url:  'http://sisdo-web/institution-api/get-instituction-auto-complete',
+                    params: { "term" : nomeInstituicao, completo:true}
+                })
+                .success(function(data) {
+                    console.log(data);
+                })
+                .error(function(data) {
+                    console.log("Ocorreu um erro no banco de dados ao trazer auto-ajuda da home");
+                });
+        }
 
 })
 

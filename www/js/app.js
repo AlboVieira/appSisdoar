@@ -20,8 +20,6 @@ var serialize = function(obj, prefix) {
 
 angular.module('starter', ['ionic','starter.controllers', 'starter.services'])
 
-
-
 .run(function($ionicPlatform,$rootScope,$ionicLoading) {
 
     $ionicPlatform.ready(function() {
@@ -49,11 +47,13 @@ angular.module('starter', ['ionic','starter.controllers', 'starter.services'])
 
 //configura para envio de requisicao
 .config(function ($httpProvider) {
-    //intercepta chamada ajax e para colocar um loading
+    //intercepta chamada ajax para colocar um loading
     $httpProvider.interceptors.push(function($rootScope) {
         return {
             request: function(config) {
-                $rootScope.$broadcast('loading:show');
+                if(config.global === undefined)
+                    $rootScope.$broadcast('loading:show');
+
                 return config;
             },
             response: function(response) {
@@ -152,10 +152,10 @@ angular.module('starter', ['ionic','starter.controllers', 'starter.services'])
     })
 
   .state('mensagens', {
-      url: '/mensagens/:id',
       templateUrl: 'templates/mensagens.html',
-      controller: 'MensagensCtrl'
-  })
+          controller: 'MensagensCtrl',
+          url: '/mensagens/:id'
+      })
 
 
     .state('tab.chat-detail', {

@@ -5,19 +5,19 @@
   </ion-nav-buttons>
 
   <ion-content class="padding">
-
     <ion-list>
-      <div class="item item-input " style="height: 10%" ng-click="">
-        <input type="text" ng-keyup="pesquisar(search)" ng-blur="limpaAuto()" ng-model="search" class="form-control input-lg"
+      <div class="item item-input " style="height: 10%" >
+        {{dados}}
+        <input type="text" ng-keyup="pesquisar(search)" ng-blur="limpaAuto()" ng-model="search" value="{{dados}}" class="form-control input-lg"
                placeholder="O que voce procura?" autofocus autocomplete="off">
-        <i class="button button-clear icon ion-search padding-right"></i>
+        <i class="button button-clear icon ion-search padding-right" ng-click="buscaInstituicao(search)"></i>
       </div>
     </ion-list>
 
     <div class="autocomplete" ng-show="completing">
       <ul>
         <li ng-repeat="dica in dicas">
-          <a class="link" >
+          <a class="link" ng-click="preenche(dica)">
             {{dica}}
           </a>
         </li>
@@ -32,9 +32,6 @@
         <h2>{{instituicao.fancyName}}</h2>
         <p>{{instituicao.branch}}</p>
         <i class="icon ion-chevron-right icon-accessory"></i>
-        <ion-option-button class="button-assertive" ng-click="remove(chat)">
-          Delete
-        </ion-option-button>
       </ion-item>
     </ion-list>
     </div>

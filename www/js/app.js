@@ -18,7 +18,7 @@ var serialize = function(obj, prefix) {
   return str.join("&");
 };
 
-angular.module('starter', ['ionic','starter.controllers', 'starter.services'])
+angular.module('starter', ['ionic','starter.controllers', 'starter.services', 'ngCordova'])
 
 .run(function($ionicPlatform,$rootScope,$ionicLoading) {
 

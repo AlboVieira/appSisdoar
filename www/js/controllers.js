@@ -25,7 +25,21 @@ angular.module('starter.controllers', ['sticky'])
       }
 })
 
-.controller('InstituicaoCtrl', function($scope,$stateParams,$http,$location,$ionicSideMenuDelegate) {
+.controller("ExampleController", function($scope, $cordovaBarcodeScanner) {
+
+    $scope.scanBarcode = function() {
+        $cordovaBarcodeScanner.scan().then(function(imageData) {
+            alert(imageData.text);
+            console.log("Barcode Format -> " + imageData.format);
+            console.log("Cancelled -> " + imageData.cancelled);
+        }, function(error) {
+            console.log("An error happened -> " + error);
+        });
+    };
+
+})
+
+.controller('InstituicaoCtrl', function($scope,$stateParams,$http,$location,$localstorage,$ionicSideMenuDelegate) {
 
     $http({
         method: 'GET',
@@ -35,10 +49,45 @@ angular.module('starter.controllers', ['sticky'])
         console.log(data);
         return $scope.instituicao = data;
     });
+    var infoSeguir = {'instituicao': $stateParams.id, 'user': $localstorage.getObject('user').id};
+    $http({
+        method: 'GET',
+        url:  'http://sisdo-web/relationship-api/is-follow',
+        params: infoSeguir
+    }).success(function(data) {
+        console.log(data);
+        if(data.isFollow){
+            $scope.follow = "Parar de Seguir";
+            $scope.followClass = 'button-assertive';
+        }
+        else{
+            $scope.follow = "Seguir";
+            $scope.followClass = 'button-positive';
+        }
+    });
+
+    $scope.seguir = function () {
+        $http({
+            method: 'POST',
+            url:  'http://sisdo-web/relationship-api/seguir',
+            data: infoSeguir
+        }).success(function(data) {
+            console.log(data);
+            if(data.isFollow){
+                $scope.follow = "Parar de Seguir";
+                $scope.followClass = 'button-assertive';
+            }
+            else{
+                $scope.follow = "Seguir";
+                $scope.followClass = 'button-positive';
+            }
+        })
+    };
 
     $scope.go = function ( path ) {
         $location.path( path );
     };
+
 })
 
 .controller('DonativosCtrl', function($scope,$stateParams,$http,$location, $ionicSideMenuDelegate) {
@@ -137,6 +186,7 @@ angular.module('starter.controllers', ['sticky'])
     $scope.openMenu = function () {
         $ionicSideMenuDelegate.toggleLeft();
     };
+
     var transacao = {};
     $http({
         method: 'GET',

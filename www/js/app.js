@@ -18,22 +18,37 @@ var serialize = function(obj, prefix) {
   return str.join("&");
 };
 
-angular.module('starter', ['ionic','starter.controllers', 'starter.services', 'ngCordova'])
+angular.module('starter', ['ionic','starter.controllers', 'starter.services', 'ngCordova','ion-autocomplete'])
 
-.run(function($ionicPlatform,$rootScope,$ionicLoading) {
+.run(function($ionicPlatform,$rootScope,$ionicLoading,$cordovaPush) {
 
-    $ionicPlatform.ready(function() {
-    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // for form inputs)
-    if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-      cordova.plugins.Keyboard.disableScroll(true);
+        var androidConfig = {
+            "senderID": "26827c56fc4cc47589fe3b43148b663d7d2c730f714a80d2"
+        };
 
-    }
-    if (window.StatusBar) {
-      // org.apache.cordova.statusbar required
-      StatusBar.styleLightContent();
-    }
+        /*
+        $cordovaPush.register(androidConfig).then(function(result) {
+            console.log(androidConfig);
+            console.log(result);
+        }, function(err) {
+            console.log(err);
+            // Error
+        }); */
+
+
+        $ionicPlatform.ready(function() {
+
+        // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+        // for form inputs)
+        if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
+          cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+          cordova.plugins.Keyboard.disableScroll(true);
+
+        }
+        if (window.StatusBar) {
+          // org.apache.cordova.statusbar required
+          StatusBar.styleLightContent();
+        }
     });
 
     //mostra mensagem no loading ajax
@@ -43,6 +58,30 @@ angular.module('starter', ['ionic','starter.controllers', 'starter.services', 'n
     $rootScope.$on('loading:hide', function() {
         $ionicLoading.hide();
     });
+
+        /*
+    $rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
+        switch(notification.event) {
+            case 'registered':
+                if (notification.regid.length > 0 ) {
+                    alert('registration ID = ' + notification.regid);
+                }
+                break;
+
+            case 'message':
+                // this is the actual push notification. its format depends on the data model from the push server
+                alert('message = ' + notification.message + ' msgCount = ' + notification.msgcnt);
+                break;
+
+            case 'error':
+                alert('GCM error = ' + notification.msg);
+                break;
+
+            default:
+                alert('An unknown GCM event has occurred');
+                break;
+        }
+    });*/
 })
 
 //configura para envio de requisicao

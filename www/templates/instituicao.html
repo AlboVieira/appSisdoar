@@ -18,7 +18,9 @@
 
             </ion-item>
             <p class="item item-assertive" ng-show="!instituicao.hasDonativos"><b>Instituicao nao possui Campanha</b></p>
-            <a class="button button-full button-balanced" ng-show="instituicao.hasDonativos" ng-click="go('/donativos/'+instituicao.id)" >Ver Donativos</a>
+            <a class="button button-full button-balanced" ng-show="instituicao.hasDonativos" ng-click="go('/donativos/'+instituicao.id)" >
+                Ver Donativos
+            </a>
             <a class="button button-full" ng-class="followClass" ng-click="seguir()">{{follow}}</a>
         </ion-list>
 

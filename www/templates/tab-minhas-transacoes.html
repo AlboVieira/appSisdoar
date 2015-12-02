@@ -3,6 +3,7 @@
         <ion-list>
             <ion-item class="item-remove-animate item-avatar item-icon-right"
                       ng-repeat="transacao in transacoes" type="item-text-wrap" ng-click="go('/transacao/'+ transacao.id)">
+                <h2 class="positive"><strong>{{transacao.institutionUser}}</strong></h2>
                 <h2>{{transacao.product}}</h2>
                 <p>{{transacao.status}}</p>
                 <i class="icon ion-chevron-right icon-accessory"></i>

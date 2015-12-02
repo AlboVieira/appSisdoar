@@ -55,7 +55,7 @@ angular.module('starter.controllers', ['sticky'])
         url:  'http://sisdo-web/relationship-api/is-follow',
         params: infoSeguir
     }).success(function(data) {
-        console.log(data);
+       // console.log(data);
         if(data.isFollow){
             $scope.follow = "Parar de Seguir";
             $scope.followClass = 'button-assertive';
@@ -258,68 +258,46 @@ angular.module('starter.controllers', ['sticky'])
 
 .controller('DashCtrl', function($scope,$http,$state,$localstorage,$location,$ionicSideMenuDelegate) {
 
-      var teste = {};
       $scope.go = function ( path ) {
            $location.path( path );
       };
       $http.get('http://sisdo-web/institution-api/get-institutions').then(function(instituicao) {
-        console.log(instituicao.data);
-        $scope.instituicoes = instituicao.data;
+            $scope.instituicoes = instituicao.data;
       },
       function(err) {
-        console.error('ERR', err);
+            console.error('ERR', err);
       });
 
-      $scope.limpaAuto = function () {
-         $scope.completing = false;
-      };
+       $scope.callbackMethod = function (query) {
 
-      $scope.pesquisar = function(pesquisa){
+           return $http({
+               method: 'GET',
+               url:  'http://sisdo-web/institution-api/get-instituction-auto-complete',
+               params: { "term" : query, global:false}
+           })
+           .success(function(data) {
+               return data;
+           })
+           .error(function(data) {
+               console.log("Ocorreu um erro no banco de dados ao trazer auto-ajuda da home");
+           });
+       };
 
-        // Se a pesquisa for vazia
-        if (pesquisa == ""){
+        $scope.pesquisar = function (nomeInstituicao) {
 
-          // Retira o autocomplete
-          $scope.completing = false;
-
-        }else{
-          // Pesquisa no banco via AJAX
-            $http({
+            return $http({
                 method: 'GET',
                 url:  'http://sisdo-web/institution-api/get-instituction-auto-complete',
-                params: { "term" : pesquisa, global:false}
+                params: { "term" : nomeInstituicao, completo:true}
             })
-              .success(function(data) {
-                console.log(data);
-                // Coloca o autocomplemento
-                $scope.completing = true;
-                $scope.dicas = data;
-              })
-              .error(function(data) {
+            .success(function(instituicao) {
+                console.log(instituicao);
+                $scope.instituicoes = instituicao;
+            })
+            .error(function(data) {
                 console.log("Ocorreu um erro no banco de dados ao trazer auto-ajuda da home");
-          });
-        }
-      };
-
-        $scope.preenche = function (data) {
-
-            $scope.search = '';
-            $scope.dados = data;
+            });
         };
-        $scope.buscaInstituicao = function(nomeInstituicao){
-            console.log(nomeInstituicao);
-                $http({
-                    method: 'GET',
-                    url:  'http://sisdo-web/institution-api/get-instituction-auto-complete',
-                    params: { "term" : nomeInstituicao, completo:true}
-                })
-                .success(function(data) {
-                    console.log(data);
-                })
-                .error(function(data) {
-                    console.log("Ocorreu um erro no banco de dados ao trazer auto-ajuda da home");
-                });
-        }
 
 })
 

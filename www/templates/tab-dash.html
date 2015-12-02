@@ -5,23 +5,12 @@
   </ion-nav-buttons>
 
   <ion-content class="padding">
-    <ion-list>
-      <div class="item item-input " style="height: 10%" >
-        {{dados}}
-        <input type="text" ng-keyup="pesquisar(search)" ng-blur="limpaAuto()" ng-model="search" value="{{dados}}" class="form-control input-lg"
-               placeholder="O que voce procura?" autofocus autocomplete="off">
-        <i class="button button-clear icon ion-search padding-right" ng-click="buscaInstituicao(search)"></i>
-      </div>
-    </ion-list>
 
-    <div class="autocomplete" ng-show="completing">
-      <ul>
-        <li ng-repeat="dica in dicas">
-          <a class="link" ng-click="preenche(dica)">
-            {{dica}}
-          </a>
-        </li>
-      </ul>
+
+    <div class="item item-input" style="height: 10%" >
+      <input ion-autocomplete type="text" placeholder="Pesquisar Instituicao" readonly="readonly" ng-model="nomeInstituicao"
+             class="ion-autocomplete" autocomplete="off"  items-method="callbackMethod(query)" />
+      <i class="button button-clear icon ion-search padding-right" ng-click="pesquisar(nomeInstituicao)"></i>
     </div>
 
     <div style="margin-top: 10px">
